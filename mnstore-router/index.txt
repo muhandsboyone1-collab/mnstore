@@ -1,0 +1,185 @@
+<!-- ====================================== -->
+<!-- AFFILIATE & RESELLER INFO SECTION -->
+<!-- ====================================== -->
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- AFFILIATE CARD -->
+    <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-amber-500/20 rounded-3xl p-8 relative overflow-hidden">
+
+      <div class="absolute -top-16 -right-16 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl"></div>
+
+      <div class="relative z-10 space-y-5">
+
+        <span class="inline-flex px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-[11px] font-bold uppercase tracking-wider">
+          💸 Program Affiliate
+        </span>
+
+        <h2 class="text-3xl font-extrabold text-white leading-tight">
+          Cuma Modal Share Link <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-500">
+            Bisa Dapat Komisi 10-15%
+          </span>
+        </h2>
+
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Tidak perlu stok produk, tidak perlu modal besar.
+          Cukup bagikan link affiliate milikmu dan dapatkan komisi otomatis setiap ada pembelian berhasil.
+        </p>
+
+        <div class="space-y-3">
+
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              💰
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white">Komisi Besar</h3>
+              <p class="text-xs text-slate-400">Setiap produk terjual kamu dapat komisi 10-15%.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              🔗
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white">Link Referral Otomatis</h3>
+              <p class="text-xs text-slate-400">Setelah daftar langsung dapat link promosi pribadi.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-sky-500/10 border border-sky-500/20">
+              🏦
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white">Withdraw Mudah</h3>
+              <p class="text-xs text-slate-400">Saldo komisi bisa dicairkan langsung lewat dashboard.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <button onclick="navigate('/register')" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-2xl transition-all shadow-lg shadow-amber-500/10">
+          Gabung Affiliate Sekarang 🚀
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- RESELLER CARD -->
+    <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 relative overflow-hidden">
+
+      <div class="absolute -bottom-16 -left-16 w-40 h-40 bg-sky-500/10 rounded-full blur-3xl"></div>
+
+      <div class="relative z-10 space-y-5">
+
+        <span class="inline-flex px-3 py-1 bg-sky-500/10 text-sky-400 border border-sky-500/20 rounded-full text-[11px] font-bold uppercase tracking-wider">
+          🔥 Program Reseller
+        </span>
+
+        <h2 class="text-3xl font-extrabold text-white leading-tight">
+          Mau Untung Lebih Besar? <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-400">
+            Join Reseller Premium
+          </span>
+        </h2>
+
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Cocok buat kamu yang mau jual ulang produk digital dengan harga sendiri.
+          Bisa jual akun premium, tools AI, streaming, dan lainnya dengan profit bebas.
+        </p>
+
+        <div class="space-y-3">
+
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-sky-500/10 border border-sky-500/20">
+              🛍️
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white">Harga Reseller Khusus</h3>
+              <p class="text-xs text-slate-400">Dapat harga lebih murah untuk dijual kembali.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20">
+              🛡️
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white">Garansi Aman</h3>
+              <p class="text-xs text-slate-400">Semua produk premium full support & ready bantuan admin.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              📈
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white">Profit Lebih Bebas</h3>
+              <p class="text-xs text-slate-400">Atur harga jual sendiri dan bangun toko digitalmu.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <a href="https://wa.me/6281227664752" target="_blank" class="block w-full py-3 bg-slate-950 hover:bg-slate-900 border border-slate-700 text-white text-center font-bold rounded-2xl transition-all">
+          Tanya Join Reseller 💬
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ====================================== -->
+<!-- CTA SECTION -->
+<!-- ====================================== -->
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <div class="bg-gradient-to-r from-amber-500/10 to-yellow-500/5 border border-amber-500/20 rounded-3xl p-8 text-center relative overflow-hidden">
+
+    <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl"></div>
+
+    <div class="relative z-10 space-y-5">
+
+      <span class="inline-flex px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-xs font-bold uppercase tracking-wider">
+        🚀 Peluang Cuan Digital
+      </span>
+
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+        Gabung Sekarang Sebelum <br>
+        Harga & Komisi Naik 🔥
+      </h2>
+
+      <p class="text-sm md:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        Bangun penghasilan online dari jualan produk digital premium.
+        Cocok untuk pelajar, mahasiswa, content creator, reseller, dan siapa saja.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 pt-2">
+
+        <button onclick="navigate('/register')" class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-2xl transition-all shadow-lg shadow-amber-500/10">
+          Join Affiliate 🚀
+        </button>
+
+        <a href="https://wa.me/6281227664752" target="_blank" class="px-6 py-3 bg-slate-950 hover:bg-slate-900 border border-slate-700 text-white font-bold rounded-2xl transition-all">
+          Join Reseller 💬
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

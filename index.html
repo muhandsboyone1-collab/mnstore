@@ -230,16 +230,6 @@
               <option value="" disabled selected>Pilih salah satu produk</option>
             </select>
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Metode Pembayaran</label>
-            <select id="ordPaymentMethod" required class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm">
-              <option value="" disabled selected>Pilih salah satu metode</option>
-              <option value="QRIS">QRIS (Gopay/OVO/Dana/LinkAja/ShopeePay)</option>
-              <option value="DANA">Transfer E-Wallet DANA</option>
-              <option value="GOPAY">Transfer E-Wallet GoPay</option>
-              <option value="BANK">Transfer Rekening Bank</option>
-            </select>
-          </div>
           <div id="ordPriceCard" class="hidden bg-slate-950/80 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
             <span class="text-sm text-slate-400">Total Pembayaran:</span>
             <span id="ordPriceDisplay" class="text-lg font-bold text-amber-400">Rp 0</span>
@@ -256,15 +246,7 @@
         <div id="ordSuccess" class="hidden text-center space-y-4">
           <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20"><i data-lucide="check-circle" class="w-10 h-10"></i></div>
           <h2 class="text-xl font-bold text-white">Order Terkirim!</h2>
-          
-          <div id="paymentDetailsCard" class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-left space-y-3">
-            <span class="text-xs text-amber-400 font-semibold uppercase tracking-wider block">Panduan Transfer Pembayaran:</span>
-            <div id="paymentDetailsContent" class="text-sm text-slate-300">
-              <!-- Terisi otomatis lewat JS -->
-            </div>
-          </div>
-
-          <p class="text-xs text-slate-500">Selesaikan transfer pembayaran di atas, lalu infokan bukti transfer Anda ke WhatsApp Admin.</p>
+          <p class="text-sm text-slate-400">Pesanan Anda telah masuk antrean. Hubungi Admin untuk menyelesaikan pembayaran.</p>
           <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
             <span class="text-xs text-slate-500 tracking-wider block">ID PEMBELIAN</span>
             <span id="ordSuccessId" class="text-3xl font-extrabold text-amber-400 mt-1 block font-mono">ORDXXXX</span>
@@ -383,29 +365,6 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Panel Kiri: Kelola Produk & Affiliates -->
       <div class="space-y-8 lg:col-span-1">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
-          <h2 class="font-bold text-white flex items-center gap-2 text-base"><i data-lucide="settings" class="text-amber-400"></i><span>Pengaturan Akun Pembayaran</span></h2>
-          <form onsubmit="submitAdminSettings(event)" class="space-y-3">
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-400 uppercase mb-1">Link Gambar QRIS</label>
-              <input type="url" id="admSetQris" placeholder="https://.../gambar-qris.jpg" class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-amber-500">
-            </div>
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-400 uppercase mb-1">No Akun DANA</label>
-              <input type="text" id="admSetDana" placeholder="DANA 081234567 A/N ..." class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-amber-500">
-            </div>
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-400 uppercase mb-1">No Akun GoPay</label>
-              <input type="text" id="admSetGopay" placeholder="GoPay 081234567 A/N ..." class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-amber-500">
-            </div>
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-400 uppercase mb-1">Detail Rekening Bank</label>
-              <input type="text" id="admSetBank" placeholder="BCA 1234567 A/N ..." class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:ring-1 focus:ring-amber-500">
-            </div>
-            <button type="submit" id="admSetBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition-all">Simpan Pengaturan Pembayaran</button>
-          </form>
-        </div>
-
         <!-- Add Product -->
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
           <h2 class="font-bold text-white flex items-center gap-2 text-base"><i data-lucide="plus-circle" class="w-5 h-5 text-amber-400"></i><span>Tambah Produk Baru</span></h2>
@@ -502,68 +461,14 @@
     const webAppUrl = "https://script.google.com/macros/s/AKfycbwGKfhPQKX1mCaqr4J1syLl1Jp-lTGsrpZQlvI3vytSRVqGQZSVxrB_3uLlM3Msc67R/exec";
     
     let activeProducts = [];
-    let activeSettings = {};    let currentAffiliateSession = null;
+    let currentAffiliateSession = null;
 
     window.onload = function() {
       // Setup listener untuk tombol/navigasi balik
       window.onpopstate = router;
       router();
       loadProductsList();
-      loadPaymentSettings(); // Ambil data rekening pembayaran saat buka halaman
     };
-
-    function loadPaymentSettings() {
-      fetch(`${webAppUrl}?action=getSettings`)
-        .then(r => r.json())
-        .then(res => {
-          if (res.success) {
-            activeSettings = res.data;
-            // Jika berada di Admin, isikan otomatis kolom-kolom form-nya
-            const qris = document.getElementById('admSetQris');
-            if (qris) {
-              qris.value = activeSettings.qris_url || "";
-              document.getElementById('admSetDana').value = activeSettings.dana_no || "";
-              document.getElementById('admSetGopay').value = activeSettings.gopay_no || "";
-              document.getElementById('admSetBank').value = activeSettings.bank_no || "";
-            }
-          }
-        });
-    }
-
-    function submitAdminSettings(e) {
-      e.preventDefault();
-      const btn = document.getElementById('admSetBtn');
-      btn.disabled = true;
-      btn.innerText = "Menyimpan...";
-
-      const payload = {
-        qris_url: document.getElementById('admSetQris').value,
-        dana_no: document.getElementById('admSetDana').value,
-        gopay_no: document.getElementById('admSetGopay').value,
-        bank_no: document.getElementById('admSetBank').value
-      };
-
-      fetch(`${webAppUrl}?action=updateSettings`, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
-      .then(r => r.json())
-      .then(res => {
-        btn.disabled = false;
-        btn.innerText = "Simpan Pengaturan Pembayaran";
-        if (res.success) {
-          alert("Pengaturan pembayaran berhasil disimpan!");
-          activeSettings = payload;
-        } else {
-          alert("Gagal menyimpan: " + res.message);
-        }
-      })
-      .catch(err => {
-        btn.disabled = false;
-        btn.innerText = "Simpan Pengaturan Pembayaran";
-        alert("Gagal koneksi: " + err);
-      });
-    }
 
     // 2. CLIENT-SIDE ROUTER ENGINE
     function router() {
@@ -595,7 +500,6 @@
         initOrderPage();
       } else if (targetView === 'view-admin') {
         loadAdminData();
-        loadPaymentSettings(); // Ambil isian di halaman admin
       }
 
       // Sembunyikan loading screen
@@ -675,7 +579,7 @@
     // 4. VIEW: ORDER & CHECKOUT FUNCTION
     function initOrderPage() {
       const select = document.getElementById('ordProduct');
-      select.innerHTML = '<option value="" disabled selected>Pilih salah satu produk</option>';
+      select.innerHTML = '<option value="" disabled selected>Memuat daftar produk...</option>';
       
       const populateDropdown = () => {
         select.innerHTML = '<option value="" disabled selected>Pilih salah satu produk</option>';
@@ -739,13 +643,11 @@
       btn.disabled = true;
       btn.innerText = "Memproses Order...";
 
-      const pm = document.getElementById('ordPaymentMethod').value;
-
       const payload = {
         buyerName: document.getElementById('ordNama').value,
         buyerContact: document.getElementById('ordKontak').value,
         product: document.getElementById('ordProduct').value,
-        paymentMethod: pm,        ref: localStorage.getItem('mnstore_ref') || ''
+        ref: localStorage.getItem('mnstore_ref') || ''
       };
 
       fetch(`${webAppUrl}?action=addSale`, {
@@ -759,37 +661,6 @@
         if (res.success) {
           document.getElementById('orderForm').classList.add('hidden');
           document.getElementById('ordSuccessId').innerText = res.orderId;
-          
-          const detailContent = document.getElementById('paymentDetailsContent');
-          let htmlInstruksi = "";
-          if (pm === "QRIS") {
-            const qrisUrl = activeSettings.qris_url || "";
-            if (qrisUrl) {
-              htmlInstruksi = `
-                <p class="text-xs text-slate-400 mb-2">Silakan scan kode QRIS resmi MNSTORE berikut untuk menyelesaikan pembayaran:</p>
-                <img src="${qrisUrl}" class="w-48 h-48 mx-auto rounded-xl border border-slate-800 object-contain my-2" onerror="this.src='photo_2026-04-11_23-46-59.jpg'">
-              `;
-            } else {
-              htmlInstruksi = `<p class="text-xs text-slate-400">Silakan hubungi WhatsApp Admin untuk mendapatkan barcode QRIS pembayaran Anda.</p>`;
-            }
-          } else if (pm === "DANA") {
-            htmlInstruksi = `
-              <p class="text-xs text-slate-400 mb-1">Kirim transfer DANA ke nomor rekening berikut:</p>
-              <p class="text-lg font-bold text-amber-400 font-mono tracking-wider select-all">${activeSettings.dana_no || "DANA: Hubungi Admin"}</p>
-            `;
-          } else if (pm === "GOPAY") {
-            htmlInstruksi = `
-              <p class="text-xs text-slate-400 mb-1">Kirim transfer GoPay ke nomor rekening berikut:</p>
-              <p class="text-lg font-bold text-amber-400 font-mono tracking-wider select-all">${activeSettings.gopay_no || "GoPay: Hubungi Admin"}</p>
-            `;
-          } else if (pm === "BANK") {
-            htmlInstruksi = `
-              <p class="text-xs text-slate-400 mb-1">Kirim transfer Bank ke nomor rekening berikut:</p>
-              <p class="text-lg font-bold text-amber-400 font-mono tracking-wider select-all">${activeSettings.bank_no || "Bank: Hubungi Admin"}</p>
-            `;
-          }
-          detailContent.innerHTML = htmlInstruksi;
-
           document.getElementById('ordSuccess').classList.remove('hidden');
           lucide.createIcons();
         } else {
@@ -891,10 +762,7 @@
           salesBody.innerHTML += `
             <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex justify-between items-center text-sm">
               <div class="space-y-1">
-                <div class="flex items-center gap-1.5">
-                  <span class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold">${s.order_id}</span>
-                  <span class="px-1.5 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded text-[9px] font-bold tracking-wider uppercase">${s.metode_pembayaran || "QRIS"}</span>
-                </div>
+                <span class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold">${s.order_id}</span>
                 <p class="font-bold text-white mt-1">${s.produk}</p>
                 <span class="text-xs text-slate-500 block">${s.tanggal}</span>
               </div>
@@ -980,6 +848,21 @@
       });
     }
 
+    function logoutAff() {
+      currentAffiliateSession = null;
+      document.getElementById('affDashboardArea').classList.add('hidden');
+      document.getElementById('affLoginArea').classList.remove('hidden');
+      document.getElementById('affLoginId').value = '';
+    }
+
+    function copyRefLink() {
+      const copyText = document.getElementById("dashRefLink");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyText.value);
+      alert("Referral Link berhasil disalin!");
+    }
+
     // 7. VIEW: CONTROL PANEL ADMIN FUNCTION
     function loadAdminData() {
       fetch(`${webAppUrl}?action=getAdminDashboard`)
@@ -1042,7 +925,6 @@
                     <div class="space-y-1 text-xs">
                       <div class="flex items-center gap-2">
                         <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-bold font-mono">${s.order_id}</span>
-                        <span class="px-1.5 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded text-[9px] font-bold uppercase tracking-wider">${s.metode_pembayaran || "QRIS"}</span>
                         <span class="text-slate-500">${s.date}</span>
                       </div>
                       <p class="text-sm text-white font-semibold">Produk: <span class="text-amber-400">${s.product}</span></p>

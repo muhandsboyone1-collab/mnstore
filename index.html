@@ -462,7 +462,6 @@
     
     let activeProducts = [];
     let currentAffiliateSession = null;
-    let currentSettings = { qris_url: "", dana_no: "", gopay_no: "", bank_no: "" };
 
     window.onload = function() {
       // Setup listener untuk tombol/navigasi balik
@@ -500,7 +499,7 @@
       if (targetView === 'view-order') {
         initOrderPage();
       } else if (targetView === 'view-admin') {
-        checkAdminSession();
+        loadAdminData();
       }
 
       // Sembunyikan loading screen
@@ -540,7 +539,7 @@
             res.data.forEach(p => {
               shelf.innerHTML += `
                 <div class="bg-slate-900 border border-slate-800 hover:border-amber-500/30 p-5 rounded-2xl flex flex-col justify-between h-[360px] relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/5 group">
-                  <span class="absolute top-4 right-4 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider">Legal</span>
+                  <span class="absolute top-4 right-4 bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider">Legal</span>
                   <div class="space-y-4">
                     <div class="w-full h-32 rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
                       <img src="${p.gambar}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" onerror="this.src='https://placehold.co/300x150/1e293b/fbbf24?text=MNSTORE'">
@@ -580,17 +579,8 @@
     // 4. VIEW: ORDER & CHECKOUT FUNCTION
     function initOrderPage() {
       const select = document.getElementById('ordProduct');
-      select.innerHTML = '<option value="" disabled selected>Pilih salah satu produk</option>';
+      select.innerHTML = '<option value="" disabled selected>Memuat daftar produk...</option>';
       
-      // Ambil data settings pembayaran dari Google Sheet secara asinkron
-      fetch(`${webAppUrl}?action=getSettings`)
-        .then(r => r.json())
-        .then(res => {
-          if (res.success && res.data) {
-            currentSettings = res.data;
-          }
-        });
-
       const populateDropdown = () => {
         select.innerHTML = '<option value="" disabled selected>Pilih salah satu produk</option>';
         activeProducts.forEach(p => {
@@ -605,6 +595,7 @@
         }
       };
 
+      // Jika data produk belum dimuat atau kosong saat halaman diakses, lakukan fetch paksa di tempat secara instan
       if (activeProducts.length === 0) {
         fetch(`${webAppUrl}?action=getProducts`)
           .then(response => response.json())
@@ -652,14 +643,11 @@
       btn.disabled = true;
       btn.innerText = "Memproses Order...";
 
-      const paymentMethod = document.getElementById('ordPayment').value;
-
       const payload = {
         buyerName: document.getElementById('ordNama').value,
         buyerContact: document.getElementById('ordKontak').value,
         product: document.getElementById('ordProduct').value,
-        ref: localStorage.getItem('mnstore_ref') || '',
-        paymentMethod: paymentMethod
+        ref: localStorage.getItem('mnstore_ref') || ''
       };
 
       fetch(`${webAppUrl}?action=addSale`, {
@@ -673,10 +661,6 @@
         if (res.success) {
           document.getElementById('orderForm').classList.add('hidden');
           document.getElementById('ordSuccessId').innerText = res.orderId;
-          
-          // Render Detail Pembayaran Dinamis di Sukses Screen
-          renderPaymentInstructions(paymentMethod);
-          
           document.getElementById('ordSuccess').classList.remove('hidden');
           lucide.createIcons();
         } else {
@@ -688,36 +672,6 @@
         btn.innerText = "Kirim Order Pemesanan";
         alert("Gagal koneksi: " + err);
       });
-    }
-
-    function renderPaymentInstructions(method) {
-      const card = document.getElementById('paymentInstructionsCard');
-      const details = document.getElementById('paymentDetails');
-      card.classList.remove('hidden');
-
-      if (method === "QRIS") {
-        details.innerHTML = `
-          <p class="text-xs text-slate-400">Silakan scan kode QRIS di bawah ini untuk menyelesaikan pembayaran:</p>
-          <div class="w-full max-w-[200px] mx-auto bg-white p-2 rounded-xl mt-2">
-            <img src="${currentSettings.qris_url || 'https://placehold.co/200x200?text=QRIS+Belum+Di-set'}" class="w-full h-auto">
-          </div>
-        `;
-      } else if (method === "DANA") {
-        details.innerHTML = `
-          <p class="text-xs text-slate-400 font-medium">Silakan transfer ke akun DANA kami:</p>
-          <p class="text-base font-extrabold text-white mt-1 font-mono">${currentSettings.dana_no || 'Belum di-set'}</p>
-        `;
-      } else if (method === "GOPAY") {
-        details.innerHTML = `
-          <p class="text-xs text-slate-400 font-medium">Silakan transfer ke akun GoPay kami:</p>
-          <p class="text-base font-extrabold text-white mt-1 font-mono">${currentSettings.gopay_no || 'Belum di-set'}</p>
-        `;
-      } else if (method === "BANK") {
-        details.innerHTML = `
-          <p class="text-xs text-slate-400 font-medium">Silakan transfer ke rekening Bank kami:</p>
-          <p class="text-sm font-bold text-white mt-1 font-mono leading-relaxed bg-slate-900 border border-slate-800 p-2.5 rounded-lg whitespace-pre-wrap">${currentSettings.bank_no || 'Belum di-set'}</p>
-        `;
-      }
     }
 
     // 5. VIEW: REGISTER AFFILIATE FUNCTION
@@ -793,9 +747,10 @@
       document.getElementById('dashSaldo').innerText = "Rp " + data.affiliate.saldo.toLocaleString('id-ID');
       document.getElementById('dashTotalKomisi').innerText = "Rp " + data.totalKomisi.toLocaleString('id-ID');
       
+      // Generate clean referral link
       document.getElementById('dashRefLink').value = `${window.location.origin}/order?ref=${data.affiliate.affiliate_id}`;
       
-      // Populate Sales History
+      // Populate Sales History Card
       const salesBody = document.getElementById('dashSalesBody');
       salesBody.innerHTML = '';
       if (data.sales.length === 0) {
@@ -820,7 +775,7 @@
         });
       }
 
-      // Populate WD History
+      // Populate WD History Card
       const wdBody = document.getElementById('dashWdBody');
       wdBody.innerHTML = '';
       if (data.withdraws.length === 0) {
@@ -854,6 +809,7 @@
         });
     }
 
+    // Modal Control Functions
     function openWdModal() { document.getElementById('wdModal').classList.remove('hidden'); }
     function closeWdModal() { document.getElementById('wdModal').classList.add('hidden'); document.getElementById('wdAmount').value = ''; document.getElementById('wdMethod').value = ''; }
 
@@ -907,86 +863,7 @@
       alert("Referral Link berhasil disalin!");
     }
 
-    // =========================================================================
-    // 7. VIEW: CONTROL PANEL ADMIN & SETTINGS
-    // =========================================================================
-    function checkAdminSession() {
-      const loggedIn = localStorage.getItem('admLoggedIn');
-      if (loggedIn === 'true') {
-        document.getElementById('admLoginArea').classList.add('hidden');
-        document.getElementById('admDashboardArea').classList.remove('hidden');
-        loadAdminData();
-        loadAdminSettings();
-      } else {
-        document.getElementById('admLoginArea').classList.remove('hidden');
-        document.getElementById('admDashboardArea').classList.add('hidden');
-      }
-    }
-
-    function submitAdminLogin(e) {
-      e.preventDefault();
-      const pass = document.getElementById('admLoginPass').value;
-      if (pass === "AdminMNSTORE123") {
-        localStorage.setItem('admLoggedIn', 'true');
-        checkAdminSession();
-      } else {
-        alert("Password Admin Salah!");
-      }
-    }
-
-    function logoutAdmin() {
-      localStorage.removeItem('admLoggedIn');
-      document.getElementById('admLoginPass').value = '';
-      checkAdminSession();
-    }
-
-    function loadAdminSettings() {
-      fetch(`${webAppUrl}?action=getSettings`)
-        .then(r => r.json())
-        .then(res => {
-          if (res.success && res.data) {
-            document.getElementById('setQris').value = res.data.qris_url || '';
-            document.getElementById('setDana').value = res.data.dana_no || '';
-            document.getElementById('setGopay').value = res.data.gopay_no || '';
-            document.getElementById('setBank').value = res.data.bank_no || '';
-          }
-        });
-    }
-
-    function submitAdminSettings(e) {
-      e.preventDefault();
-      const btn = document.getElementById('setSaveBtn');
-      btn.disabled = true;
-      btn.innerText = "Menyimpan...";
-
-      const payload = {
-        qris_url: document.getElementById('setQris').value,
-        dana_no: document.getElementById('setDana').value,
-        gopay_no: document.getElementById('setGopay').value,
-        bank_no: document.getElementById('setBank').value
-      };
-
-      fetch(`${webAppUrl}?action=updateSettings`, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
-      .then(r => r.json())
-      .then(res => {
-        btn.disabled = false;
-        btn.innerText = "Simpan Pengaturan";
-        if (res.success) {
-          alert("Pengaturan Pembayaran berhasil disimpan!");
-        } else {
-          alert("Gagal menyimpan pengaturan.");
-        }
-      })
-      .catch(err => {
-        btn.disabled = false;
-        btn.innerText = "Simpan Pengaturan";
-        alert("Error: " + err);
-      });
-    }
-
+    // 7. VIEW: CONTROL PANEL ADMIN FUNCTION
     function loadAdminData() {
       fetch(`${webAppUrl}?action=getAdminDashboard`)
         .then(r => r.json())
@@ -1149,6 +1026,7 @@
         .then(res => { alert(res.message); loadAdminData(); });
     }
 
+    // ACTIONS: WITHDRAW
     function adminApproveWd(id) {
       fetch(`${webAppUrl}?action=approveWd&id=${id}`, { method: "POST" })
         .then(r => r.json())

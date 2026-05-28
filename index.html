@@ -5,56 +5,1039 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MNSTORE - Premium Digital Goods</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100">
+<body class="bg-slate-950 text-slate-100 min-h-screen">
 
-  <!-- LOADING OVERLAY -->
-  <div id="loadingOverlay" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center">
-    <div class="w-12 h-12 border-4 border-slate-800 border-t-amber-500 rounded-full animate-spin"></div>
+  <!-- 1. LOADING SCREEN & ROUTER TRANSITION -->
+  <div id="loadingOverlay" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-all duration-300">
+    <div class="relative mb-4">
+      <div class="absolute -inset-1 rounded-full bg-amber-500/20 blur-xl"></div>
+      <img src="photo_2026-04-11_23-46-59.jpg" alt="MNSTORE Logo" class="w-20 h-20 rounded-full border border-amber-500/30 relative z-10 animate-pulse object-cover" onerror="this.src='https://placehold.co/150x150/fbbf24/000000?text=M'">
+    </div>
+    <div class="w-12 h-12 rounded-full border-2 border-slate-800 border-t-amber-500 animate-spin"></div>
+    <p class="text-sm text-slate-400 mt-4 tracking-wider animate-pulse">Menghubungkan ke server...</p>
   </div>
 
-  <div id="content" class="p-4">
-      <h1 class="text-2xl font-bold text-center mb-6">Etalase Produk</h1>
-      <div id="productsShelf" class="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
-        <p class="text-center col-span-2">Memuat produk...</p>
+  <!-- 2. MAIN NAV BAR -->
+  <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('/')">
+        <img src="photo_2026-04-11_23-46-59.jpg" alt="MNSTORE Logo" class="w-9 h-9 rounded-full border border-amber-500/20 object-cover" onerror="this.src='https://placehold.co/100x100/fbbf24/000000?text=M'">
+        <span class="font-bold text-white text-lg tracking-tight">MN<span class="text-amber-400">STORE</span></span>
       </div>
+      <div class="flex items-center gap-4 text-sm font-semibold">
+        <button onclick="navigate('/affiliate')" class="text-slate-300 hover:text-amber-400 transition-colors">Affiliate Area</button>
+        <button onclick="navigate('/register')" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl transition-all shadow-md shadow-amber-500/10">Gabung Reseller</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW: STOREFRONT (🏠) -->
+  <!-- ========================================================================= -->
+  <div id="view-storefront" class="view-panel hidden relative">
+    <!-- Hero Banner -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center space-y-6 relative">
+      <div class="absolute -top-12 -left-12 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl"></div>
+      <div class="absolute -top-12 -right-12 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl"></div>
+      
+      <span class="inline-flex px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-xs font-bold uppercase tracking-wider">
+        🎉 Official Store Premium Digital
+      </span>
+      <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+        Layanan Premium & Legal <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-500">Full Garansi Tanpa Ribet</span>
+      </h1>
+      <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-base">
+        MNSTORE menyediakan berbagai macam kebutuhan digital goods terlengkap mulai dari Canva Pro, Capcut, Netflix, dan akun premium premium lainnya dengan harga terjangkau & garansi penuh.
+      </p>
+    </section>
+
+    <!-- Products Shelf Grid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-10">
+      <div class="flex items-center justify-between border-b border-slate-900 pb-4">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="sparkles" class="text-amber-400 w-5 h-5"></i>
+          <span>Etalase Produk Kami</span>
+        </h2>
+        <span class="text-xs text-slate-500">Realtime Update</span>
+      </div>
+
+      <div id="productsShelf" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="col-span-full py-12 text-center text-slate-500 space-y-2">
+          <div class="w-8 h-8 rounded-full border-2 border-slate-800 border-t-amber-500 animate-spin mx-auto"></div>
+          <p class="text-sm">Menghubungkan etalase produk...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- NEW SECTIONS: AFFILIATE, RESELLER & PERBANDINGAN -->
+    <!-- ========================================================================= -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 border-t border-slate-900">
+      <!-- 1. Program Affiliate -->
+      <div class="bg-gradient-to-r from-slate-950 to-slate-900 border border-slate-800/80 p-8 rounded-3xl relative overflow-hidden flex flex-col lg:flex-row justify-between items-center gap-8 shadow-2xl">
+        <div class="absolute -top-16 -right-16 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl"></div>
+        <div class="space-y-4 max-w-2xl">
+          <span class="inline-flex px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-xs font-bold uppercase tracking-wider">💸 Program Kemitraan</span>
+          <h3 class="text-2xl md:text-3xl font-extrabold text-white">Cukup Sebar Link, Komisi Jalan Otomatis!</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Tanpa stok barang, tanpa modal, cukup promosikan link rujukan khusus milik Anda dan dapatkan keuntungan bersih dari setiap pesanan yang berhasil.</p>
+          <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-semibold text-slate-300">
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-amber-400"></i> Komisi 10% - 15%</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-amber-400"></i> Tracking Otomatis</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-amber-400"></i> Withdraw Cepat</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-amber-400"></i> Sistem Sangat Aman</span>
+          </div>
+        </div>
+        <button onclick="navigate('/register')" class="w-full lg:w-auto shrink-0 px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-2xl shadow-xl shadow-amber-500/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-sm">
+          <span>Gabung Affiliate Sekarang</span> <i data-lucide="arrow-right" class="w-4 h-4 text-slate-950"></i>
+        </button>
+      </div>
+
+      <!-- 2. Program Reseller -->
+      <div class="bg-gradient-to-r from-slate-950 to-slate-900 border border-slate-800/80 p-8 rounded-3xl relative overflow-hidden flex flex-col lg:flex-row justify-between items-center gap-8 shadow-2xl">
+        <div class="absolute -top-16 -right-16 w-48 h-48 bg-yellow-500/10 rounded-full blur-3xl"></div>
+        <div class="space-y-4 max-w-2xl">
+          <span class="inline-flex px-3 py-1 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 rounded-full text-xs font-bold uppercase tracking-wider">💰 Jualan Mandiri</span>
+          <h3 class="text-2xl md:text-3xl font-extrabold text-white">Jual Ulang Produk Premium & Tentukan Harga Sendiri!</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Dapatkan harga grosir termurah untuk semua akun premium kami. Sangat cocok bagi Anda yang sudah memiliki basis pelanggan setia di grup sosial media.</p>
+          <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-semibold text-slate-300">
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-yellow-500"></i> Profit Lebih Besar</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-yellow-500"></i> Bisa Jual Ulang</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-yellow-500"></i> Support Full Admin</span>
+            <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-yellow-500"></i> Produk High Quality</span>
+          </div>
+        </div>
+        <a href="https://wa.me/6281227664752?text=Halo%20Admin%20MNSTORE%2C%20saya%20tertarik%20untuk%20menjadi%20Reseller%20resmi" target="_blank" class="w-full lg:w-auto shrink-0 px-8 py-4 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-slate-950 font-extrabold rounded-2xl shadow-xl shadow-yellow-500/10 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-sm">
+          <span>Hubungi Owner (Reseller)</span> <i data-lucide="message-circle" class="w-4 h-4 text-slate-950"></i>
+        </a>
+      </div>
+
+      <!-- 3. Perbandingan Affiliate vs Reseller -->
+      <div class="space-y-6">
+        <div class="text-center">
+          <h3 class="text-xl md:text-2xl font-bold text-white">Affiliate vs Reseller</h3>
+          <p class="text-xs text-slate-500 mt-1">Pilih tipe kemitraan yang paling cocok dengan model bisnis Anda.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <!-- Card Affiliate -->
+          <div class="bg-slate-900 border border-slate-800/80 p-6 rounded-2xl space-y-4">
+            <h4 class="font-extrabold text-amber-400 text-base flex items-center gap-2"><i data-lucide="award" class="w-5 h-5"></i> Partner Affiliate</h4>
+            <ul class="space-y-2.5 text-xs text-slate-300">
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> 100% Tanpa modal awal</li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Cukup menyebarkan tautan rujukan</li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Komisi pasti sebesar 10% - 15%</li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Sangat cocok dikelola pemula</li>
+            </ul>
+          </div>
+          <!-- Card Reseller -->
+          <div class="bg-slate-900 border border-slate-800/80 p-6 rounded-2xl space-y-4">
+            <h4 class="font-extrabold text-yellow-500 text-base flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5"></i> Partner Reseller</h4>
+            <ul class="space-y-2.5 text-xs text-slate-300">
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Membeli produk dalam jumlah grosir</li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Berhak menjual ulang secara mandiri</li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Menentukan margin profit sendiri</li>
+              <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Direkomendasikan bagi pedagang serius</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <script>
-    const webAppUrl = "URL_WEB_APP_ANDA_DISINI"; // PASTI GANTI INI
+  <!-- ========================================================================= -->
+  <!-- VIEW: REGISTER AFFILIATE (👥) -->
+  <!-- ========================================================================= -->
+  <div id="view-register" class="view-panel hidden max-w-md mx-auto px-4 py-16">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl"></div>
+      <div class="relative z-10 space-y-6">
+        <div class="text-center">
+          <img src="photo_2026-04-11_23-46-59.jpg" class="w-16 h-16 rounded-full border border-amber-500/20 object-cover mx-auto mb-3" onerror="this.src='https://placehold.co/100'">
+          <h1 class="text-2xl font-bold text-white tracking-tight">Gabung Affiliate</h1>
+          <p class="text-sm text-slate-400 mt-1">Hasilkan komisi dengan mempromosikan produk kami.</p>
+        </div>
 
-    async function loadProductsList() {
-      const shelf = document.getElementById('productsShelf');
-      try {
-        const response = await fetch(`${webAppUrl}?action=getProducts`);
-        const res = await response.json();
-        
-        if (res.success && res.data.length > 0) {
-            shelf.innerHTML = res.data.map(p => `
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
-                    <img src="${p.gambar}" class="w-full h-32 object-cover rounded-lg mb-2">
-                    <h3 class="font-bold">${p.produk}</h3>
-                    <p class="text-amber-400">Rp ${Number(p.harga).toLocaleString()}</p>
+        <form id="regForm" onsubmit="submitRegister(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nama Lengkap</label>
+            <input type="text" id="regNama" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 bg-slate-950/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Kontak (WA / Telegram)</label>
+            <input type="text" id="regKontak" required placeholder="Contoh: @budis atau 081234567" class="w-full px-4 py-3 bg-slate-950/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm">
+          </div>
+          <button type="submit" id="regBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+            <span>Daftar Sekarang</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <div id="regSuccess" class="hidden text-center space-y-4">
+          <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20"><i data-lucide="check-circle" class="w-10 h-10"></i></div>
+          <h2 class="text-xl font-bold text-white">Pendaftaran Berhasil!</h2>
+          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+            <span class="text-xs text-slate-500 tracking-wider block">ID AFFILIATE ANDA</span>
+            <span id="regSuccessId" class="text-3xl font-extrabold text-amber-400 mt-1 block font-mono">AFFXXXX</span>
+          </div>
+          <button onclick="navigate('/affiliate')" class="w-full py-2.5 bg-slate-950 border border-slate-800 hover:bg-slate-900 rounded-xl text-sm font-semibold text-amber-400">Masuk Dashboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW: ORDER CHECKOUT (🛒) -->
+  <!-- ========================================================================= -->
+  <div id="view-order" class="view-panel hidden max-w-md mx-auto px-4 py-16">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl"></div>
+      <div class="relative z-10 space-y-6">
+        <div class="text-center">
+          <img src="photo_2026-04-11_23-46-59.jpg" class="w-16 h-16 rounded-full border border-amber-500/20 object-cover mx-auto mb-3" onerror="this.src='https://placehold.co/100'">
+          <h1 class="text-2xl font-bold text-white tracking-tight">Form Pemesanan</h1>
+          <p class="text-sm text-slate-400 mt-1">Lengkapi data Anda untuk memproses pesanan premium.</p>
+        </div>
+
+        <form id="orderForm" onsubmit="submitOrder(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nama Lengkap</label>
+            <input type="text" id="ordNama" required placeholder="Nama lengkap Anda" class="w-full px-4 py-3 bg-slate-950/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">WhatsApp / Telegram Kontak</label>
+            <input type="text" id="ordKontak" required placeholder="Contoh: 081298765432" class="w-full px-4 py-3 bg-slate-950/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Pilih Produk</label>
+            <select id="ordProduct" onchange="updateCheckoutPrice()" required class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm">
+              <option value="" disabled selected>Pilih salah satu produk</option>
+            </select>
+          </div>
+          <div id="ordPriceCard" class="hidden bg-slate-950/80 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
+            <span class="text-sm text-slate-400">Total Pembayaran:</span>
+            <span id="ordPriceDisplay" class="text-lg font-bold text-amber-400">Rp 0</span>
+          </div>
+          <div id="ordRefBadge" class="hidden flex items-center space-x-2 text-xs text-amber-400 bg-amber-500/5 border border-amber-500/10 p-3 rounded-lg">
+            <i data-lucide="award" class="w-4 h-4 shrink-0"></i>
+            <span>Dirujuk oleh Partner: <strong id="ordRefVal" class="font-mono">ORGANIC</strong></span>
+          </div>
+          <button type="submit" id="ordBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+            <span>Kirim Order Pemesanan</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <div id="ordSuccess" class="hidden text-center space-y-4">
+          <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20"><i data-lucide="check-circle" class="w-10 h-10"></i></div>
+          <h2 class="text-xl font-bold text-white">Order Terkirim!</h2>
+          <p class="text-sm text-slate-400">Pesanan Anda telah masuk antrean. Hubungi Admin untuk menyelesaikan pembayaran.</p>
+          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+            <span class="text-xs text-slate-500 tracking-wider block">ID PEMBELIAN</span>
+            <span id="ordSuccessId" class="text-3xl font-extrabold text-amber-400 mt-1 block font-mono">ORDXXXX</span>
+          </div>
+          <button onclick="navigate('/')" class="w-full py-2.5 bg-slate-950 border border-slate-800 hover:bg-slate-900 rounded-xl text-sm font-semibold text-slate-300">Kembali ke Beranda</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW: AFFILIATE DASHBOARD & LOGIN (👤/📈) -->
+  <!-- ========================================================================= -->
+  <div id="view-affiliate" class="view-panel hidden py-10 max-w-7xl mx-auto px-4">
+    <!-- Login Area -->
+    <div id="affLoginArea" class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl"></div>
+      <div class="relative z-10 space-y-6">
+        <div class="text-center">
+          <div class="inline-flex p-3 bg-amber-500/10 text-amber-400 rounded-xl mb-3 border border-amber-500/20"><i data-lucide="layout-dashboard" class="w-8 h-8"></i></div>
+          <h1 class="text-2xl font-bold text-white">Dashboard Affiliate</h1>
+          <p class="text-sm text-slate-400 mt-1">Masukkan ID Affiliate untuk login.</p>
+        </div>
+        <form onsubmit="submitAffLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">ID Affiliate</label>
+            <input type="text" id="affLoginId" required placeholder="Contoh: AFF1000" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm font-mono uppercase">
+          </div>
+          <button type="submit" id="affLoginBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2">
+            <span>Masuk Dashboard</span> <i data-lucide="log-in" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Realtime Dashboard Area (Hidden initially) -->
+    <div id="affDashboardArea" class="hidden space-y-8">
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl relative overflow-hidden">
+        <div class="absolute -top-16 -right-16 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl"></div>
+        <div class="z-10">
+          <h1 class="text-2xl font-bold text-white flex items-center gap-2">
+            <span>Halo, </span><span id="dashName" class="text-amber-400">---</span> 👋
+          </h1>
+          <p class="text-sm text-slate-400 mt-1">Kelola link promosi dan pantau pendapatan Anda secara realtime.</p>
+        </div>
+        <div class="flex items-center gap-3 z-10">
+          <span class="bg-slate-950 px-4 py-2 border border-slate-800 rounded-xl text-sm font-bold font-mono text-amber-400">ID: <span id="dashId">AFF---</span></span>
+          <button onclick="logoutAff()" class="p-2.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 rounded-xl transition-all"><i data-lucide="log-out" class="w-5 h-5"></i></button>
+        </div>
+      </div>
+
+      <!-- Referral Link Card -->
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+        <div class="flex items-center gap-2 text-amber-400"><i data-lucide="link" class="w-5 h-5"></i><h2 class="font-bold text-white">Referral Link Promosi Anda</h2></div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input type="text" id="dashRefLink" readonly class="flex-1 bg-slate-950 border border-slate-800 px-4 py-3 rounded-xl text-sm text-slate-300 font-mono select-all focus:outline-none">
+          <button onclick="copyRefLink()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="copy" class="w-4 h-4"></i> <span>Salin Link</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center space-x-4">
+          <div class="p-4 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20"><i data-lucide="wallet" class="w-6 h-6"></i></div>
+          <div><span class="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Saldo Saat Ini</span><span id="dashSaldo" class="text-2xl font-bold text-emerald-400 block mt-1">Rp 0</span></div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center space-x-4">
+          <div class="p-4 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20"><i data-lucide="banknote" class="w-6 h-6"></i></div>
+          <div><span class="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Total Komisi Cair</span><span id="dashTotalKomisi" class="text-2xl font-bold text-amber-400 block mt-1">Rp 0</span></div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between gap-4">
+          <div class="flex items-center gap-3"><div class="p-2 bg-yellow-500/10 text-yellow-500 rounded-xl border border-yellow-500/20"><i data-lucide="arrow-up-right" class="w-5 h-5"></i></div><span class="text-sm font-semibold text-white">Tarik Saldo Komisi</span></div>
+          <button onclick="openWdModal()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 px-4 rounded-xl transition-all text-sm">Request Penarikan (WD)</button>
+        </div>
+      </div>
+
+      <!-- Tables Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Sales -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+          <h2 class="font-bold text-white flex items-center gap-2"><i data-lucide="shopping-cart" class="text-amber-400"></i><span>Riwayat Penjualan</span></h2>
+          <div class="max-h-80 overflow-y-auto custom-scroll space-y-2 pr-1" id="dashSalesBody">
+            <p class="text-slate-500 text-center py-8">Belum ada transaksi.</p>
+          </div>
+        </div>
+        <!-- WD -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+          <h2 class="font-bold text-white flex items-center gap-2"><i data-lucide="arrow-up-right" class="text-amber-400"></i><span>Riwayat Withdraw (WD)</span></h2>
+          <div class="max-h-80 overflow-y-auto custom-scroll space-y-2 pr-1" id="dashWdBody">
+            <p class="text-slate-500 text-center py-8">Belum ada riwayat penarikan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW: CONTROL PANEL ADMIN (🔑) -->
+  <!-- ========================================================================= -->
+  <div id="view-admin" class="view-panel hidden py-10 max-w-7xl mx-auto px-4 space-y-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl"></div>
+      <div class="z-10 flex items-center gap-4">
+        <img src="photo_2026-04-11_23-46-59.jpg" class="w-12 h-12 rounded-full border border-amber-500/20 object-cover" onerror="this.src='https://placehold.co/100'">
+        <div>
+          <h1 class="text-2xl font-bold text-white flex items-center gap-2"><span>Control Panel Admin</span> <span class="px-2 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs rounded-lg font-bold">SUPER CONTROL</span></h1>
+          <p class="text-sm text-slate-400 mt-1">Konfirmasi Pembayaran Order, Setujui Penarikan (WD), & Kelola Etalase.</p>
+        </div>
+      </div>
+      <div class="z-10"><button onclick="loadAdminData()" class="px-4 py-2.5 bg-slate-950 border border-slate-800 hover:bg-slate-900 text-sm font-semibold rounded-xl text-slate-300 flex items-center gap-2 transition-all"><i data-lucide="rotate-cw" class="w-4 h-4"></i>Refresh Data</button></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Panel Kiri: Kelola Produk & Affiliates -->
+      <div class="space-y-8 lg:col-span-1">
+        <!-- Add Product -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+          <h2 class="font-bold text-white flex items-center gap-2 text-base"><i data-lucide="plus-circle" class="w-5 h-5 text-amber-400"></i><span>Tambah Produk Baru</span></h2>
+          <form onsubmit="submitAdminAddProduct(event)" class="space-y-3">
+            <input type="text" id="admNewName" required placeholder="Nama Produk" class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-amber-500">
+            <div class="grid grid-cols-2 gap-2">
+              <input type="number" id="admNewPrice" required placeholder="Harga (Rp)" class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-amber-500">
+              <input type="number" id="admNewComm" required placeholder="Komisi (%)" class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+            <input type="url" id="admNewImage" placeholder="Link Gambar (https://...)" class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-amber-500">
+            <textarea id="admNewDesc" rows="2" placeholder="Deskripsi Singkat..." class="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"></textarea>
+            <button type="submit" id="admAddBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-xl text-sm transition-all">Simpan ke Etalase</button>
+          </form>
+        </div>
+        <!-- Products List -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+          <h2 class="font-bold text-white flex items-center gap-2 text-base"><i data-lucide="package" class="text-amber-400"></i><span>Daftar Produk</span></h2>
+          <div class="max-h-60 overflow-y-auto custom-scroll space-y-2 pr-1" id="admProductsList">
+            <p class="text-sm text-slate-500 text-center py-4">Memuat data...</p>
+          </div>
+        </div>
+        <!-- Affiliates List -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+          <h2 class="font-bold text-white flex items-center gap-2 text-base"><i data-lucide="users" class="text-amber-400"></i><span>Daftar Affiliate</span></h2>
+          <div class="max-h-60 overflow-y-auto custom-scroll space-y-2 pr-1" id="admAffiliatesList">
+            <p class="text-sm text-slate-500 text-center py-4">Memuat data...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Kanan: Approvals -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- Pending Orders -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+          <h2 class="font-bold text-white flex items-center gap-2 text-base"><i data-lucide="clock" class="text-amber-400"></i><span>Pending Orders (Butuh Konfirmasi)</span></h2>
+          <div class="space-y-4 max-h-[350px] overflow-y-auto custom-scroll pr-2" id="admPendingOrders">
+            <p class="text-sm text-slate-500 text-center py-8">Memuat order...</p>
+          </div>
+        </div>
+        <!-- WD Requests -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+          <h2 class="font-bold text-white flex items-center gap-2 text-base"><i data-lucide="wallet" class="text-amber-400"></i><span>Permintaan Withdraw (Butuh Konfirmasi)</span></h2>
+          <div class="space-y-4 max-h-[350px] overflow-y-auto custom-scroll pr-2" id="admPendingWd">
+            <p class="text-sm text-slate-500 text-center py-8">Memuat request WD...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS & DIALOGS -->
+  <!-- ========================================================================= -->
+  <!-- MODAL WITHDRAW -->
+  <div id="wdModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-bold text-white">Form Penarikan Saldo</h3>
+        <button onclick="closeWdModal()" class="text-slate-400 hover:text-slate-200"><i data-lucide="x" class="w-6 h-6"></i></button>
+      </div>
+      <form onsubmit="submitWdRequest(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Jumlah WD (IDR)</label>
+          <input type="number" id="wdAmount" required min="1000" placeholder="Contoh: 50000" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Metode Transfer & Nomor Rekening</label>
+          <textarea id="wdMethod" required rows="2" placeholder="Contoh: Bank BCA, Rek 123456789 A/N Budi Santoso atau DANA 08123456" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500 text-sm resize-none"></textarea>
+        </div>
+        <button type="submit" id="wdSubmitBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2"><span>Kirim Request WD</span> <i data-lucide="check" class="w-4 h-4"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- BOTTOM FOOTER -->
+  <footer class="border-t border-slate-900 bg-slate-950/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center space-y-4">
+      <p class="text-xs text-slate-500">© 2026 MNSTORE. All Rights Reserved. Powered by Google Apps Script & Netlify API.</p>
+      <div class="flex justify-center gap-6 text-xs text-slate-500">
+        <button onclick="navigate('/')" class="hover:text-amber-400 transition-colors">Etalase Toko</button>
+        <span>•</span>
+        <button onclick="navigate('/affiliate')" class="hover:text-amber-400 transition-colors">Dashboard Affiliate</button>
+        <span>•</span>
+        <button onclick="navigate('/register')" class="hover:text-amber-400 transition-colors">Daftar Affiliate</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- FRONTEND BUSINESS LOGIC (JAVASCRIPT) -->
+  <!-- ========================================================================= -->
+  <script>
+    // 1. CONFIGURATION (Ganti dengan URL Google Apps Script Web App asli Anda)
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwGKfhPQKX1mCaqr4J1syLl1Jp-lTGsrpZQlvI3vytSRVqGQZSVxrB_3uLlM3Msc67R/exec";
+    
+    let activeProducts = [];
+    let currentAffiliateSession = null;
+
+    window.onload = function() {
+      // Setup listener untuk tombol/navigasi balik
+      window.onpopstate = router;
+      router();
+      loadProductsList();
+    };
+
+    // 2. CLIENT-SIDE ROUTER ENGINE
+    function router() {
+      const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('ref') || '';
+      
+      if (ref) localStorage.setItem('mnstore_ref', ref);
+      
+      const views = {
+        '': 'view-storefront',
+        'affiliate': 'view-affiliate',
+        'register': 'view-register',
+        'order': 'view-order',
+        'admin': 'view-admin'
+      };
+
+      const targetView = views[path] || 'view-storefront';
+      
+      // Sembunyikan semua views
+      document.querySelectorAll('.view-panel').forEach(v => v.classList.add('hidden'));
+      
+      // Tampilkan view target
+      const panel = document.getElementById(targetView);
+      if (panel) panel.classList.remove('hidden');
+
+      // Jalankan inisialisasi view khusus
+      if (targetView === 'view-order') {
+        initOrderPage();
+      } else if (targetView === 'view-admin') {
+        loadAdminData();
+      }
+
+      // Sembunyikan loading screen
+      const loader = document.getElementById('loadingOverlay');
+      loader.classList.add('opacity-0');
+      setTimeout(() => loader.classList.add('hidden'), 300);
+      
+      lucide.createIcons();
+    }
+
+    function navigate(path) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('ref') || localStorage.getItem('mnstore_ref') || '';
+      let targetPath = path;
+      if (ref && !path.includes('?')) {
+        targetPath += `?ref=${ref}`;
+      }
+      
+      window.history.pushState({}, '', targetPath);
+      
+      // Tampilkan kembali loading overlay saat berpindah halaman
+      const loader = document.getElementById('loadingOverlay');
+      loader.classList.remove('hidden', 'opacity-0');
+      
+      setTimeout(router, 150);
+    }
+
+    // 3. STOREFRONT & PRODUCTS FUNCTION
+    function loadProductsList() {
+      fetch(`${webAppUrl}?action=getProducts`)
+        .then(response => response.json())
+        .then(res => {
+          const shelf = document.getElementById('productsShelf');
+          if (res.success && res.data.length > 0) {
+            activeProducts = res.data;
+            shelf.innerHTML = '';
+            res.data.forEach(p => {
+              shelf.innerHTML += `
+                <div class="bg-slate-900 border border-slate-800 hover:border-amber-500/30 p-5 rounded-2xl flex flex-col justify-between h-[360px] relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/5 group">
+                  <span class="absolute top-4 right-4 bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider">Legal</span>
+                  <div class="space-y-4">
+                    <div class="w-full h-32 rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+                      <img src="${p.gambar}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" onerror="this.src='https://placehold.co/300x150/1e293b/fbbf24?text=MNSTORE'">
+                    </div>
+                    <div class="space-y-1">
+                      <h3 class="font-bold text-white text-base tracking-tight">${p.produk}</h3>
+                      <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${p.deskripsi}</p>
+                    </div>
+                  </div>
+                  <div class="space-y-3 pt-4 border-t border-slate-800/60">
+                    <div class="flex justify-between items-end">
+                      <span class="text-[10px] text-slate-500 block font-medium uppercase tracking-wider">Harga Promo</span>
+                      <span class="font-extrabold text-amber-400 text-lg">Rp ${p.harga.toLocaleString('id-ID')}</span>
+                    </div>
+                    <button onclick="orderProduct('${p.produk}')" class="w-full py-2.5 bg-slate-950 hover:bg-amber-500 border border-slate-800 hover:border-amber-400 text-amber-400 hover:text-slate-950 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all">
+                      <i data-lucide="shopping-cart" class="w-4 h-4"></i> <span>Pesan Sekarang</span>
+                    </button>
+                  </div>
                 </div>
-            `).join('');
-        } else {
-            shelf.innerHTML = "<p class='text-center col-span-2'>Belum ada produk.</p>";
+              `;
+            });
+            lucide.createIcons();
+          } else {
+            shelf.innerHTML = `<p class="col-span-full text-center text-slate-500 py-10">Belum ada produk aktif.</p>`;
+          }
+        })
+        .catch(err => {
+          document.getElementById('productsShelf').innerHTML = `<p class="col-span-full text-center text-rose-500 py-10">Koneksi database gagal.</p>`;
+        });
+    }
+
+    function orderProduct(productName) {
+      localStorage.setItem('mnstore_selected_product', productName);
+      navigate('/order');
+    }
+
+    // 4. VIEW: ORDER & CHECKOUT FUNCTION
+    function initOrderPage() {
+      const select = document.getElementById('ordProduct');
+      select.innerHTML = '<option value="" disabled selected>Memuat daftar produk...</option>';
+      
+      const populateDropdown = () => {
+        select.innerHTML = '<option value="" disabled selected>Pilih salah satu produk</option>';
+        activeProducts.forEach(p => {
+          select.innerHTML += `<option value="${p.produk}" data-price="${p.harga}">${p.produk} - Rp ${p.harga.toLocaleString('id-ID')}</option>`;
+        });
+
+        const savedProd = localStorage.getItem('mnstore_selected_product');
+        if (savedProd) {
+          select.value = savedProd;
+          localStorage.removeItem('mnstore_selected_product');
+          updateCheckoutPrice();
         }
-      } catch (err) {
-        shelf.innerHTML = "<p class='text-center col-span-2 text-red-500'>Server sibuk, coba lagi nanti.</p>";
-      } finally {
-        // PAKSA HILANGKAN LOADING
-        document.getElementById('loadingOverlay').classList.add('hidden');
+      };
+
+      // Jika data produk belum dimuat atau kosong saat halaman diakses, lakukan fetch paksa di tempat secara instan
+      if (activeProducts.length === 0) {
+        fetch(`${webAppUrl}?action=getProducts`)
+          .then(response => response.json())
+          .then(res => {
+            if (res.success && res.data.length > 0) {
+              activeProducts = res.data;
+              populateDropdown();
+            } else {
+              select.innerHTML = '<option value="" disabled selected>Belum ada produk aktif</option>';
+            }
+          })
+          .catch(err => {
+            select.innerHTML = '<option value="" disabled selected>Koneksi database gagal</option>';
+          });
+      } else {
+        populateDropdown();
+      }
+
+      const ref = localStorage.getItem('mnstore_ref') || '';
+      const badge = document.getElementById('ordRefBadge');
+      const val = document.getElementById('ordRefVal');
+      if (ref) {
+        val.innerText = ref;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
       }
     }
 
-    // PAKSA HILANGKAN LOADING JIKA FETCH MACET (Safety Timeout)
-    setTimeout(() => {
-        document.getElementById('loadingOverlay').classList.add('hidden');
-    }, 3000);
+    function updateCheckoutPrice() {
+      const select = document.getElementById('ordProduct');
+      const option = select.options[select.selectedIndex];
+      const price = Number(option.getAttribute('data-price'));
+      
+      const priceCard = document.getElementById('ordPriceCard');
+      const priceDisplay = document.getElementById('ordPriceDisplay');
+      
+      priceDisplay.innerText = "Rp " + price.toLocaleString('id-ID');
+      priceCard.classList.remove('hidden');
+    }
 
-    window.onload = loadProductsList;
+    function submitOrder(e) {
+      e.preventDefault();
+      const btn = document.getElementById('ordBtn');
+      btn.disabled = true;
+      btn.innerText = "Memproses Order...";
+
+      const payload = {
+        buyerName: document.getElementById('ordNama').value,
+        buyerContact: document.getElementById('ordKontak').value,
+        product: document.getElementById('ordProduct').value,
+        ref: localStorage.getItem('mnstore_ref') || ''
+      };
+
+      fetch(`${webAppUrl}?action=addSale`, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(res => {
+        btn.disabled = false;
+        btn.innerText = "Kirim Order Pemesanan";
+        if (res.success) {
+          document.getElementById('orderForm').classList.add('hidden');
+          document.getElementById('ordSuccessId').innerText = res.orderId;
+          document.getElementById('ordSuccess').classList.remove('hidden');
+          lucide.createIcons();
+        } else {
+          alert("Error: " + res.message);
+        }
+      })
+      .catch(err => {
+        btn.disabled = false;
+        btn.innerText = "Kirim Order Pemesanan";
+        alert("Gagal koneksi: " + err);
+      });
+    }
+
+    // 5. VIEW: REGISTER AFFILIATE FUNCTION
+    function submitRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('regBtn');
+      btn.disabled = true;
+      btn.innerText = "Mendaftarkan...";
+
+      const payload = {
+        nama: document.getElementById('regNama').value,
+        kontak: document.getElementById('regKontak').value
+      };
+
+      fetch(`${webAppUrl}?action=createAffiliate`, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(res => {
+        btn.disabled = false;
+        btn.innerText = "Daftar Sekarang";
+        if (res.success) {
+          document.getElementById('regForm').classList.add('hidden');
+          document.getElementById('regSuccessId').innerText = res.affiliateId;
+          document.getElementById('regSuccess').classList.remove('hidden');
+          lucide.createIcons();
+        } else {
+          alert("Error: " + res.message);
+        }
+      })
+      .catch(err => {
+        btn.disabled = false;
+        btn.innerText = "Daftar Sekarang";
+        alert("Gagal daftar: " + err);
+      });
+    }
+
+    // 6. VIEW: AFFILIATE DASHBOARD
+    function submitAffLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('affLoginBtn');
+      const loginId = document.getElementById('affLoginId').value.toUpperCase().trim();
+      
+      btn.disabled = true;
+      btn.innerText = "Memverifikasi...";
+
+      fetch(`${webAppUrl}?action=getAffiliateDashboard&id=${loginId}`)
+        .then(r => r.json())
+        .then(res => {
+          btn.disabled = false;
+          btn.innerText = "Masuk Dashboard";
+          if (res.success) {
+            currentAffiliateSession = loginId;
+            document.getElementById('affLoginArea').classList.add('hidden');
+            populateAffDashboard(res);
+            document.getElementById('affDashboardArea').classList.remove('hidden');
+            lucide.createIcons();
+          } else {
+            alert(res.message);
+          }
+        })
+        .catch(err => {
+          btn.disabled = false;
+          btn.innerText = "Masuk Dashboard";
+          alert("Gagal memproses login: " + err);
+        });
+    }
+
+    function populateAffDashboard(data) {
+      document.getElementById('dashName').innerText = data.affiliate.nama;
+      document.getElementById('dashId').innerText = data.affiliate.affiliate_id;
+      document.getElementById('dashSaldo').innerText = "Rp " + data.affiliate.saldo.toLocaleString('id-ID');
+      document.getElementById('dashTotalKomisi').innerText = "Rp " + data.totalKomisi.toLocaleString('id-ID');
+      
+      // Generate clean referral link
+      document.getElementById('dashRefLink').value = `${window.location.origin}/order?ref=${data.affiliate.affiliate_id}`;
+      
+      // Populate Sales History Card
+      const salesBody = document.getElementById('dashSalesBody');
+      salesBody.innerHTML = '';
+      if (data.sales.length === 0) {
+        salesBody.innerHTML = `<p class="text-slate-500 text-center py-8">Belum ada riwayat penjualan.</p>`;
+      } else {
+        data.sales.forEach(s => {
+          const statusColors = { "PAID": "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", "PENDING": "text-amber-400 bg-amber-500/10 border-amber-500/20", "REJECTED": "text-rose-400 bg-rose-500/10 border-rose-500/20" };
+          const badgeClass = statusColors[s.status] || "text-slate-400";
+          salesBody.innerHTML += `
+            <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex justify-between items-center text-sm">
+              <div class="space-y-1">
+                <span class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold">${s.order_id}</span>
+                <p class="font-bold text-white mt-1">${s.produk}</p>
+                <span class="text-xs text-slate-500 block">${s.tanggal}</span>
+              </div>
+              <div class="text-right space-y-1">
+                <span class="text-xs font-semibold text-emerald-400 block">+Rp ${s.komisi.toLocaleString('id-ID')}</span>
+                <span class="px-2 py-0.5 border text-[10px] rounded font-bold uppercase tracking-wider ${badgeClass}">${s.status}</span>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // Populate WD History Card
+      const wdBody = document.getElementById('dashWdBody');
+      wdBody.innerHTML = '';
+      if (data.withdraws.length === 0) {
+        wdBody.innerHTML = `<p class="text-slate-500 text-center py-8">Belum ada riwayat penarikan.</p>`;
+      } else {
+        data.withdraws.forEach(w => {
+          const statusColors = { "APPROVED": "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", "PENDING": "text-amber-400 bg-amber-500/10 border-amber-500/20", "REJECTED": "text-rose-400 bg-rose-500/10 border-rose-500/20" };
+          const badgeClass = statusColors[w.status] || "text-slate-400";
+          wdBody.innerHTML += `
+            <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex justify-between items-center text-sm">
+              <div class="space-y-1">
+                <span class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded text-xs font-mono font-bold">${w.request_id}</span>
+                <p class="font-bold text-white mt-1">Metode: ${w.metode}</p>
+                <span class="text-xs text-slate-500 block">${w.tanggal}</span>
+              </div>
+              <div class="text-right space-y-1">
+                <span class="text-xs font-bold text-rose-400 block">-Rp ${w.amount.toLocaleString('id-ID')}</span>
+                <span class="px-2 py-0.5 border text-[10px] rounded font-bold uppercase tracking-wider ${badgeClass}">${w.status}</span>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    function refreshAffDashboard() {
+      fetch(`${webAppUrl}?action=getAffiliateDashboard&id=${currentAffiliateSession}`)
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) populateAffDashboard(res);
+        });
+    }
+
+    // Modal Control Functions
+    function openWdModal() { document.getElementById('wdModal').classList.remove('hidden'); }
+    function closeWdModal() { document.getElementById('wdModal').classList.add('hidden'); document.getElementById('wdAmount').value = ''; document.getElementById('wdMethod').value = ''; }
+
+    function submitWdRequest(e) {
+      e.preventDefault();
+      const btn = document.getElementById('wdSubmitBtn');
+      btn.disabled = true;
+      btn.innerText = "Mengirim...";
+
+      const payload = {
+        id: currentAffiliateSession,
+        amount: document.getElementById('wdAmount').value,
+        metode: document.getElementById('wdMethod').value
+      };
+
+      fetch(`${webAppUrl}?action=requestWithdraw`, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(res => {
+        btn.disabled = false;
+        btn.innerText = "Kirim Request WD";
+        if (res.success) {
+          alert(res.message);
+          closeWdModal();
+          refreshAffDashboard();
+        } else {
+          alert("Error: " + res.message);
+        }
+      })
+      .catch(err => {
+        btn.disabled = false;
+        btn.innerText = "Kirim Request WD";
+        alert("Gagal memproses WD: " + err);
+      });
+    }
+
+    function logoutAff() {
+      currentAffiliateSession = null;
+      document.getElementById('affDashboardArea').classList.add('hidden');
+      document.getElementById('affLoginArea').classList.remove('hidden');
+      document.getElementById('affLoginId').value = '';
+    }
+
+    function copyRefLink() {
+      const copyText = document.getElementById("dashRefLink");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyText.value);
+      alert("Referral Link berhasil disalin!");
+    }
+
+    // 7. VIEW: CONTROL PANEL ADMIN FUNCTION
+    function loadAdminData() {
+      fetch(`${webAppUrl}?action=getAdminDashboard`)
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            const data = res.data;
+            
+            // Populate Products
+            const prodList = document.getElementById('admProductsList');
+            prodList.innerHTML = '';
+            if (data.products.length === 0) {
+              prodList.innerHTML = `<p class="text-sm text-slate-500 text-center py-4">Belum ada produk.</p>`;
+            } else {
+              data.products.forEach(p => {
+                prodList.innerHTML += `
+                  <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl flex justify-between items-center text-sm">
+                    <div class="flex items-center gap-3">
+                      <img src="${p.gambar}" class="w-10 h-10 object-cover rounded-lg border border-slate-800" onerror="this.src='https://placehold.co/100'">
+                      <div>
+                        <span class="font-semibold text-white block text-xs">${p.produk}</span>
+                        <span class="text-[10px] text-slate-500">Rp ${p.harga.toLocaleString('id-ID')} | Komisi ${p.komisi_persen}%</span>
+                      </div>
+                    </div>
+                    <button onclick="adminDeleteProduct('${p.produk}')" class="p-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 rounded-lg transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                  </div>
+                `;
+              });
+            }
+
+            // Populate Affiliates
+            const affList = document.getElementById('admAffiliatesList');
+            affList.innerHTML = '';
+            if (data.affiliates.length === 0) {
+              affList.innerHTML = `<p class="text-sm text-slate-500 text-center py-4">Belum ada affiliate.</p>`;
+            } else {
+              data.affiliates.forEach(a => {
+                affList.innerHTML += `
+                  <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl flex justify-between items-center text-sm">
+                    <div>
+                      <span class="font-extrabold text-amber-400 font-mono text-xs">${a.id}</span>
+                      <span class="font-medium text-white block text-[10px] mt-0.5">${a.nama} (${a.kontak})</span>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-400">Rp ${a.saldo.toLocaleString('id-ID')}</span>
+                  </div>
+                `;
+              });
+            }
+
+            // Populate Pending Orders
+            const pendingOrders = document.getElementById('admPendingOrders');
+            pendingOrders.innerHTML = '';
+            const unconfirmedSales = data.sales.filter(s => s.status === 'PENDING');
+            if (unconfirmedSales.length === 0) {
+              pendingOrders.innerHTML = `<p class="text-sm text-slate-500 text-center py-8">🎉 Semua order sudah bersih.</p>`;
+            } else {
+              unconfirmedSales.forEach(s => {
+                pendingOrders.innerHTML += `
+                  <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-1 text-xs">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-bold font-mono">${s.order_id}</span>
+                        <span class="text-slate-500">${s.date}</span>
+                      </div>
+                      <p class="text-sm text-white font-semibold">Produk: <span class="text-amber-400">${s.product}</span></p>
+                      <p class="text-slate-400">Pembeli: <span class="text-white">${s.buyer}</span> (${s.contact})</p>
+                      <p class="text-slate-400">Affiliate: <span class="text-amber-400 font-mono font-bold">${s.affiliate_id}</span> | Komisi: <span class="text-emerald-400 font-semibold">Rp ${s.commission.toLocaleString('id-ID')}</span></p>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                      <button onclick="adminConfirmOrder('${s.order_id}')" class="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center justify-center gap-1 transition-all"><i data-lucide="check" class="w-3.5 h-3.5"></i> Confirm</button>
+                      <button onclick="adminRejectOrder('${s.order_id}')" class="flex-1 md:flex-none bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center justify-center gap-1 transition-all"><i data-lucide="x" class="w-3.5 h-3.5"></i> Reject</button>
+                    </div>
+                  </div>
+                `;
+              });
+            }
+
+            // Populate Pending WD Requests
+            const pendingWds = document.getElementById('admPendingWd');
+            pendingWds.innerHTML = '';
+            const unconfirmedWds = data.withdraws.filter(w => w.status === 'PENDING');
+            if (unconfirmedWds.length === 0) {
+              pendingWds.innerHTML = `<p class="text-sm text-slate-500 text-center py-8">🎉 Semua request WD sudah selesai.</p>`;
+            } else {
+              unconfirmedWds.forEach(w => {
+                pendingWds.innerHTML += `
+                  <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-1 text-xs">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 rounded font-bold font-mono">${w.request_id}</span>
+                        <span class="text-slate-500">${w.date}</span>
+                      </div>
+                      <p class="text-sm text-white font-semibold">Affiliate: <span class="text-amber-400 font-mono font-bold">${w.affiliate_id}</span></p>
+                      <p class="text-sm font-bold text-rose-400">Jumlah: Rp ${w.amount.toLocaleString('id-ID')}</p>
+                      <p class="text-slate-400">Metode: <span class="text-slate-300">${w.metode}</span></p>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                      <button onclick="adminApproveWd('${w.request_id}')" class="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center justify-center gap-1 transition-all"><i data-lucide="check" class="w-3.5 h-3.5"></i> Approve</button>
+                      <button onclick="adminRejectWd('${w.request_id}')" class="flex-1 md:flex-none bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center justify-center gap-1 transition-all"><i data-lucide="x" class="w-3.5 h-3.5"></i> Reject</button>
+                    </div>
+                  </div>
+                `;
+              });
+            }
+            lucide.createIcons();
+          }
+        });
+    }
+
+    function submitAdminAddProduct(e) {
+      e.preventDefault();
+      const btn = document.getElementById('admAddBtn');
+      btn.disabled = true;
+      btn.innerText = "Menyimpan...";
+
+      const payload = {
+        nama: document.getElementById('admNewName').value,
+        harga: document.getElementById('admNewPrice').value,
+        komisi: document.getElementById('admNewComm').value,
+        gambar: document.getElementById('admNewImage').value,
+        deskripsi: document.getElementById('admNewDesc').value
+      };
+
+      fetch(`${webAppUrl}?action=addProduct`, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(res => {
+        btn.disabled = false;
+        btn.innerText = "Simpan ke Etalase";
+        if (res.success) {
+          alert("Produk berhasil ditambahkan!");
+          document.getElementById('addProdForm').reset();
+          loadAdminData();
+          loadProductsList();
+        } else {
+          alert("Gagal: " + res.message);
+        }
+      });
+    }
+
+    function adminDeleteProduct(name) {
+      if (!confirm(`Hapus produk "${name}"?`)) return;
+      fetch(`${webAppUrl}?action=deleteProduct&nama=${encodeURIComponent(name)}`, { method: "POST" })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) { loadAdminData(); loadProductsList(); }
+        });
+    }
+
+    function adminConfirmOrder(id) {
+      fetch(`${webAppUrl}?action=confirmOrder&id=${id}`, { method: "POST" })
+        .then(r => r.json())
+        .then(res => { alert(res.message); loadAdminData(); });
+    }
+
+    function adminRejectOrder(id) {
+      fetch(`${webAppUrl}?action=rejectOrder&id=${id}`, { method: "POST" })
+        .then(r => r.json())
+        .then(res => { alert(res.message); loadAdminData(); });
+    }
+
+    // ACTIONS: WITHDRAW
+    function adminApproveWd(id) {
+      fetch(`${webAppUrl}?action=approveWd&id=${id}`, { method: "POST" })
+        .then(r => r.json())
+        .then(res => { alert(res.message); loadAdminData(); });
+    }
+
+    function adminRejectWd(id) {
+      fetch(`${webAppUrl}?action=rejectWd&id=${id}`, { method: "POST" })
+        .then(r => r.json())
+        .then(res => { alert(res.message); loadAdminData(); });
+    }
   </script>
 </body>
 </html>
